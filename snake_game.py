@@ -1,4 +1,5 @@
 import pyglet
+from random import randrange
 
 # konstanta velikost jednoho čtverce
 SQUARE = 64 # v pixelech
@@ -10,10 +11,10 @@ class Game_state:
     def __init__(self):
         self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
         self.way = "right"
-        self.food = [(2, 3)]
+        self.food = [(randrange(0, 10), randrange(0, 10))]
 
-# nastavení pohybu hada
 def move(self):
+    """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
     x, y = game.snake[-1]
     if game.way == "right":
         new_head = (x + 1, y) # úprava původní hlavy
@@ -35,7 +36,9 @@ def move(self):
         pyglet.clock.unschedule(move)
         
 
-pyglet.clock.schedule_interval(move, 1/3)
+
+
+pyglet.clock.schedule_interval(move, 1/4)
 
 
 # ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
@@ -61,16 +64,14 @@ apple = pyglet.sprite.Sprite(image_apple)
 
 
 
-
-
-# vykreslení hada
 def draw():
     window.clear()
+    # vykreslení hada
     for (x, y) in game.snake:
         green_tile.x = x * SQUARE
         green_tile.y = y * SQUARE
         green_tile.draw()
-
+    # vykreslení jídlo (jablko)
     for (x, y) in game.food:
         apple.x = x * SQUARE
         apple.y = y * SQUARE
