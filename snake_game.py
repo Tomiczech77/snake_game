@@ -10,6 +10,7 @@ class Game_state:
     def __init__(self):
         self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
         self.way = "right"
+        self.food = [(2, 3)]
 
 # nastavení pohybu hada
 def move(self):
@@ -52,8 +53,12 @@ def button(text):
 game = Game_state()
 
 # zelená dlaždice
-image = pyglet.image.load("green.png")
-green_tile = pyglet.sprite.Sprite(image)
+image_green = pyglet.image.load("green.png")
+green_tile = pyglet.sprite.Sprite(image_green)
+
+image_apple = pyglet.image.load("apple.png")
+apple = pyglet.sprite.Sprite(image_apple)
+
 
 
 
@@ -65,6 +70,12 @@ def draw():
         green_tile.x = x * SQUARE
         green_tile.y = y * SQUARE
         green_tile.draw()
+
+    for (x, y) in game.food:
+        apple.x = x * SQUARE
+        apple.y = y * SQUARE
+        apple.draw()
+        
     
 
 window.push_handlers(
