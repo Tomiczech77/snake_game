@@ -11,7 +11,13 @@ class Game_state:
     def __init__(self):
         self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
         self.way = "right"
-        self.food = [(randrange(0, 10), randrange(0, 10))]
+        self.food = []
+    
+    def add_food(self):
+        if game.food == None:
+            game.food.x = randrange(0, 10)
+            game.food.y = randrange(0, 10)
+            game.food.append((game.food.x, game.food.y))
 
 def move(self):
     """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
@@ -34,8 +40,6 @@ def move(self):
     # had, když narazí do sebe sama, hra končí
     if new_head in body_snake:
         pyglet.clock.unschedule(move)
-        
-
 
 
 pyglet.clock.schedule_interval(move, 1/4)
@@ -52,17 +56,16 @@ def button(text):
     elif text == "s":
         game.way = "down"
 
-# vytvoření objektu "game"
-game = Game_state()
+
+game = Game_state() # vytvoření objektu "game"
 
 # zelená dlaždice
 image_green = pyglet.image.load("green.png")
 green_tile = pyglet.sprite.Sprite(image_green)
 
+# jablko
 image_apple = pyglet.image.load("apple.png")
 apple = pyglet.sprite.Sprite(image_apple)
-
-
 
 def draw():
     window.clear()
@@ -71,14 +74,12 @@ def draw():
         green_tile.x = x * SQUARE
         green_tile.y = y * SQUARE
         green_tile.draw()
-    # vykreslení jídlo (jablko)
+    # vykreslení jídla (jablka)
     for (x, y) in game.food:
         apple.x = x * SQUARE
         apple.y = y * SQUARE
         apple.draw()
         
-    
-
 window.push_handlers(
     on_text=button,
     on_draw=draw
