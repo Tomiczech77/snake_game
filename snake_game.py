@@ -12,12 +12,20 @@ class Game_state:
         self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
         self.way = "right"
         self.food = []
+        self.add_food()
     
     def add_food(self):
-        if game.food == None:
-            game.food.x = randrange(0, 10)
-            game.food.y = randrange(0, 10)
-            game.food.append((game.food.x, game.food.y))
+        while True:
+            if self.food == []:
+                x = randrange(0, 10)
+                y = randrange(0, 10)
+                if (x, y) in self.snake:
+                    continue
+                else:
+                    self.food.append((x, y))
+                    break
+
+
 
 def move(self):
     """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
