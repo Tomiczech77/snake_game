@@ -39,7 +39,7 @@ def move(self):
     elif game.way == "down":
         new_head = (x, y - 1) # úprava původní hlavy
     game.snake.append(new_head) # přidání nové hlavy hada
-    del game.snake[0] # smazání první souřadnice
+    # del game.snake[0] # smazání první souřadnice
 
     body_snake = game.snake[0:-1] # tělo hada (bez hlavy)
     # had, když narazí do stěny, hra končí
@@ -49,13 +49,15 @@ def move(self):
     if new_head in body_snake:
         pyglet.clock.unschedule(move)
 
+    if new_head not in game.food:
+        del game.snake[0] # smazání první souřadnici
     # pojídání jídla hadem
     if new_head in game.food: # jidlo had
         game.food.remove(new_head) # smaže jídlo hada
-        game.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
+        game.snake.insert(-1, new_head) # had se prodlouží o danou souřadnici s jídlem
         game.add_food() # přidá další náhodné jídlo pro hada
 
-pyglet.clock.schedule_interval(move, 1/4)
+pyglet.clock.schedule_interval(move, 1/2)
 
 # ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
 def button(text):
