@@ -52,10 +52,12 @@ def move(self):
     if new_head not in game.food:
         del game.snake[0] # smazání první souřadnici
     # pojídání jídla hadem
-    if new_head in game.food: # jidlo had
+    elif new_head in game.food: # jidlo had
         game.food.remove(new_head) # smaže jídlo hada
-        game.snake.insert(-1, new_head) # had se prodlouží o danou souřadnici s jídlem
+        game.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
         game.add_food() # přidá další náhodné jídlo pro hada
+
+        
 
 pyglet.clock.schedule_interval(move, 1/2)
 
