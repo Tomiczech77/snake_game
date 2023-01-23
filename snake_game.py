@@ -14,7 +14,9 @@ class Game_state:
         self.food = []
         self.add_food()
     
+
     def add_food(self):
+        """Přidá jídlo pro hada"""
         while True:
             if self.food == []:
                 x = randrange(0, 10)
