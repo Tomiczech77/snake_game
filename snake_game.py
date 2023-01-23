@@ -27,8 +27,6 @@ class Game_state:
                     self.food.append((x, y))
                     break
 
-
-
 def move(self):
     """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
     x, y = game.snake[-1]
@@ -51,9 +49,13 @@ def move(self):
     if new_head in body_snake:
         pyglet.clock.unschedule(move)
 
+    # pojídání jídla hadem
+    if new_head in game.food: # jidlo had
+        game.food.remove(new_head) # smaže jídlo hada
+        game.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
+        game.add_food() # přidá další náhodné jídlo pro hada
 
 pyglet.clock.schedule_interval(move, 1/4)
-
 
 # ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
 def button(text):
@@ -65,7 +67,6 @@ def button(text):
         game.way = "up"
     elif text == "s":
         game.way = "down"
-
 
 game = Game_state() # vytvoření objektu "game"
 
