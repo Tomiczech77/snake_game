@@ -71,7 +71,7 @@ def button(text):
 game = Game_state() # vytvoření objektu "game"
 
 # zelená dlaždice
-image_green = pyglet.image.load("green.png")
+image_green = pyglet.image.load("tail.png")
 green_tile = pyglet.sprite.Sprite(image_green)
 
 # jablko
