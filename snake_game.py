@@ -13,6 +13,8 @@ class Game_state:
         self.way = "right"
         self.food = []
         self.add_food()
+        self.width = 10
+        self.height = 10
     
 
     def add_food(self):
@@ -49,16 +51,12 @@ def move(self):
 
     body_snake = game.snake[0:-1] # tělo hada (bez hlavy)
     # had, když narazí do stěny, hra končí
-    if x == -1 or x == 10 or y == -1 or y == 10:
+    if x < 0 or x > 9 or y < 0 or y > 9:
         pyglet.clock.unschedule(move)
     # had, když narazí do sebe sama, hra končí
     elif new_head in body_snake:
         pyglet.clock.unschedule(move)
 
-    
-        
-
-        
 
 pyglet.clock.schedule_interval(move, 1/4)
 
