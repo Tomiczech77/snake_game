@@ -5,7 +5,8 @@ from random import randrange
 SQUARE = 64 # v pixelech
 
 # velikost herního pole je 10 x 10
-window = pyglet.window.Window(width=SQUARE*10, height=SQUARE*10)
+GAME_FIELD_SIZE = 10
+window = pyglet.window.Window(width=SQUARE*GAME_FIELD_SIZE, height=SQUARE*GAME_FIELD_SIZE)
 pyglet.text.layout
 
 class Game_state:
@@ -14,8 +15,23 @@ class Game_state:
         self.way = "right"
         self.food = []
         self.add_food()
-        self.width = 10
-        self.height = 10
+        self.width = GAME_FIELD_SIZE
+        self.height = GAME_FIELD_SIZE
+        image_background = pyglet.image.load("background.jpg")
+        self.background = pyglet.sprite.Sprite(image_background)
+        self.background.scale = 0.6
+
+    def add_food(self):
+        """Přidá jídlo pro hada"""
+        while True:
+            if self.food == []:
+                x = randrange(0, 10)
+                y = randrange(0, 10)
+                if (x, y) in self.snake:
+                    continue
+                else:
+                    self.food.append((x, y))
+                    break
     
     def move(self, t):
         """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
@@ -33,14 +49,15 @@ class Game_state:
         (x, y) = new_head
         if x < 0 or x > 9 or y < 0 or y > 9:
             pyglet.clock.unschedule(self.move)
-
-        if new_head not in self.food:
-            del self.snake[0] # smazání první souřadnici
+            return
 
         # had, když narazí do sebe sama, hra končí
         if new_head in self.snake:
             pyglet.clock.unschedule(self.move)
+            return
 
+        if new_head not in self.food:
+            del self.snake[0] # smazání první souřadnici
 
         # pojídání jídla hadem
         if new_head in self.food: # jidlo had
@@ -48,20 +65,13 @@ class Game_state:
             self.add_food() # přidá další náhodné jídlo pro hada
         self.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
 
-    def add_food(self):
-        """Přidá jídlo pro hada"""
-        while True:
-            if self.food == []:
-                x = randrange(0, 10)
-                y = randrange(0, 10)
-                if (x, y) in self.snake:
-                    continue
-                else:
-                    self.food.append((x, y))
-                    break
 
     #ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
     def button(self, text):
+        # pyglet.window.key.UP
+        # pyglet.window.key.DOWN
+        # pyglet.window.key.LEFT
+        # pyglet.window.key.RIGHT
         if text == "d":
             game.way = "right"
         elif text == "a":
@@ -73,13 +83,14 @@ class Game_state:
 
     def draw(self):
         window.clear()
+        game.background.draw()
         # vykreslení hada
-        for (x, y) in game.snake:
+        for (x, y) in self.snake:
             green_tile.x = x * SQUARE
             green_tile.y = y * SQUARE
             green_tile.draw()
         # vykreslení jídla (jablka)
-        for (x, y) in game.food:
+        for (x, y) in self.food:
             apple.x = x * SQUARE
             apple.y = y * SQUARE
             apple.draw()
