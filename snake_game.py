@@ -15,6 +15,7 @@ class Game_state:
         self.add_food()
         self.width = 10
         self.height = 10
+        self.move()
     
 
     def add_food(self):
@@ -29,36 +30,38 @@ class Game_state:
                     self.food.append((x, y))
                     break
 
-def move(self):
-    """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
-    x, y = game.snake[-1]
-    if game.way == "right":
-        new_head = (x + 1, y) # úprava původní hlavy
-    elif game.way == "left":
-        new_head = (x - 1, y) # úprava původní hlavy
-    elif game.way == "up":
-        new_head = (x, y + 1) # úprava původní hlavy
-    elif game.way == "down":
-        new_head = (x, y - 1) # úprava původní hlavy
+    def move(self):
+        """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
+        (x, y) = self.snake[-1]
+        if self.way == "right":
+            new_head = (x + 1, y) # úprava původní hlavy
+        elif self.way == "left":
+            new_head = (x - 1, y) # úprava původní hlavy
+        elif self.way == "up":
+            new_head = (x, y + 1) # úprava původní hlavy
+        elif self.way == "down":
+            new_head = (x, y - 1) # úprava původní hlavy
 
-    if new_head not in game.food:
-        del game.snake[0] # smazání první souřadnici
-    # pojídání jídla hadem
-    elif new_head in game.food: # jidlo had
-        game.food.remove(new_head) # smaže jídlo hada
-        game.add_food() # přidá další náhodné jídlo pro hada
-    game.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
+        if new_head not in self.food:
+            del self.snake[0] # smazání první souřadnici
+        # pojídání jídla hadem
+        elif new_head in self.food: # jidlo had
+            self.food.remove(new_head) # smaže jídlo hada
+            self.add_food() # přidá další náhodné jídlo pro hada
+        self.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
 
-    body_snake = game.snake[0:-1] # tělo hada (bez hlavy)
-    # had, když narazí do stěny, hra končí
-    if x < 0 or x > 9 or y < 0 or y > 9:
-        pyglet.clock.unschedule(move)
-    # had, když narazí do sebe sama, hra končí
-    elif new_head in body_snake:
-        pyglet.clock.unschedule(move)
+        body_snake = self.snake[0:-1] # tělo hada (bez hlavy)
+        # had, když narazí do stěny, hra končí
+        if x < 0 or x > 9 or y < 0 or y > 9:
+            pyglet.clock.unschedule(move)
+        # had, když narazí do sebe sama, hra končí
+        elif new_head in body_snake:
+            pyglet.clock.unschedule(move)
 
 
-pyglet.clock.schedule_interval(move, 1/4)
+
+
+pyglet.clock.schedule_interval(Game_state.move, 1/4)
 
 # ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
 def button(text):
