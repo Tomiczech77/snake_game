@@ -1,5 +1,9 @@
 import pyglet
 from random import randrange
+from pathlib import Path
+
+# instance pro složku s obrázky na grafiku hada
+TILES_DIRECTORY = Path("snake-tiles")
 
 # konstanta velikost jednoho čtverce
 SQUARE = 64 # v pixelech
