@@ -85,8 +85,10 @@ class Game_state:
         elif text == "s":
             game.way = "down"
 
+
     def draw(self):
         window.clear()
+        # pozadí herního okna
         game.background.draw()
         # vykreslení hada
         for (x, y) in self.snake:
@@ -99,8 +101,10 @@ class Game_state:
             apple.y = y * SQUARE
             apple.draw()
 
+
 game = Game_state() # vytvoření objektu "game"
 pyglet.clock.schedule_interval(game.move, 1/4)
+
 
 # zelená dlaždice
 image_green = pyglet.image.load("tail.png")
@@ -116,3 +120,7 @@ window.push_handlers(
     )
 
 pyglet.app.run()
+
+
+
+zkouska
