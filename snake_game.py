@@ -101,6 +101,11 @@ class Game_state:
             apple.y = y * SQUARE
             apple.draw()
 
+snake_tiles = {}
+for path in TILES_DIRECTORY.glob("*.png"):
+    snake_tiles[path.stem] = pyglet.image.load(path)
+
+print(snake_tiles)
 
 game = Game_state() # vytvoření objektu "game"
 pyglet.clock.schedule_interval(game.move, 1/4)
@@ -120,7 +125,3 @@ window.push_handlers(
     )
 
 pyglet.app.run()
-
-
-
-zkouska
