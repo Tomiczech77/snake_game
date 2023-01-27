@@ -72,6 +72,7 @@ class Game_state:
 
     #ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
     def button(self, text):
+        """Nastavení směru po stisknutí klávesy"""
         # pyglet.window.key.UP
         # pyglet.window.key.DOWN
         # pyglet.window.key.LEFT
@@ -87,6 +88,7 @@ class Game_state:
 
 
     def draw(self):
+        """Vykresluje"""
         window.clear()
         # pozadí herního okna
         game.background.draw()
@@ -101,24 +103,27 @@ class Game_state:
             apple.y = y * SQUARE
             apple.draw()
 
+
+# cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
 for path in TILES_DIRECTORY.glob("*.png"):
     snake_tiles[path.stem] = pyglet.image.load(path)
 
-print(snake_tiles)
 
-game = Game_state() # vytvoření objektu "game"
+# vytvoření objektu "game" + rozpohybování hada
+game = Game_state()
 pyglet.clock.schedule_interval(game.move, 1/4)
 
 
 # zelená dlaždice
-image_green = pyglet.image.load("tail.png")
+image_green = snake_tiles["tail-head"]
 green_tile = pyglet.sprite.Sprite(image_green)
 
 # jablko
 image_apple = pyglet.image.load("apple.png")
 apple = pyglet.sprite.Sprite(image_apple)
 
+# registrace funkcí
 window.push_handlers(
     on_text=game.button,
     on_draw=game.draw
