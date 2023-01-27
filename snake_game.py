@@ -101,11 +101,12 @@ class Game_state:
             apple.y = y * SQUARE
             apple.draw()
 
+
+# cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
 for path in TILES_DIRECTORY.glob("*.png"):
     snake_tiles[path.stem] = pyglet.image.load(path)
 
-print(snake_tiles)
 
 game = Game_state() # vytvoření objektu "game"
 pyglet.clock.schedule_interval(game.move, 1/4)
