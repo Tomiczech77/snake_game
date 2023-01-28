@@ -11,14 +11,11 @@ SQUARE = 64 # v pixelech
 # velikost herního pole je 10 x 10
 GAME_FIELD_SIZE = 10
 window = pyglet.window.Window(width=SQUARE*GAME_FIELD_SIZE, height=SQUARE*GAME_FIELD_SIZE)
-pyglet.text.layout
 
 class Game_state:
     def __init__(self):
-        self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
-        self.snake_sprites = []
-        self.snake_directions = ['tail-top', 'bottom-top', 'bottom-head']
-        self.way = "right"
+        self.snake = [(0, 0), (0, 1), (0, 2)]
+        self.way = "up"
         self.food = []
         self.add_food()
         self.width = GAME_FIELD_SIZE
@@ -26,6 +23,7 @@ class Game_state:
         image_background = pyglet.image.load("background.jpg")
         self.background = pyglet.sprite.Sprite(image_background)
         self.background.scale = 0.6
+        # self.length_snake = len(self.snake)
 
     def add_food(self):
         """Přidá jídlo pro hada"""
@@ -60,6 +58,7 @@ class Game_state:
         # had, když narazí do sebe sama, hra končí
         if new_head in self.snake:
             pyglet.clock.unschedule(self.move)
+            # self.game_over()
             return
 
         if new_head not in self.food:
@@ -88,12 +87,20 @@ class Game_state:
         elif text == "s":
             game.way = "down"
 
+    # text na konec hry - dořešit
+    # def game_over(self):
+    #     text_game_over = pyglet.text.Label("GAME OVER",
+    #                         font_name="Times New Roma",
+    #                         font_size=36,
+    #                         x= (GAME_FIELD_SIZE / 3) * SQUARE, y=(GAME_FIELD_SIZE / 2) * SQUARE)
+
 
     def draw(self):
         """Vykresluje"""
         window.clear()
         # pozadí herního okna
         game.background.draw()
+        # game.text_game_over.draw()
         # vykreslení hada na dané souřadnici
         for (x, y) in self.snake:
             green_tile.x = x * SQUARE
@@ -104,25 +111,11 @@ class Game_state:
             apple.x = x * SQUARE
             apple.y = y * SQUARE
             apple.draw()
-    
-
-
-    def draw_snake_parts(self):
-        '''
-        Draw the right IMG for each part of snake on the right place.
-        '''
-        self.snake_sprites.clear()
-        for index, xy in enumerate(self.snake):
-            x = xy[0]*GAME_FIELD_SIZE
-            y = xy[1]*GAME_FIELD_SIZE
-            IMG_name = self.snake_directions[index]
-            self.snake_sprites.append(pyglet.sprite.Sprite(snake_tiles[IMG_name], x, y, batch=batch))
-
-
-
         
 
-
+# def vykresli(snake, image):
+#     for index, xy in enumerate(snake):
+#         if (index - 1) ==  and (index + 1)
 
 # cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
@@ -130,10 +123,10 @@ for path in TILES_DIRECTORY.glob("*.png"):
     snake_tiles[path.stem] = pyglet.image.load(path)
 
 
+
 # vytvoření objektu "game" + rozpohybování hada
 game = Game_state()
 pyglet.clock.schedule_interval(game.move, 1/4)
-batch = pyglet.graphics.Batch()
 
 
 # zelená dlaždice
