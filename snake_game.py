@@ -16,6 +16,8 @@ pyglet.text.layout
 class Game_state:
     def __init__(self):
         self.snake = [(0, 0), (0, 1), (0, 2), (1, 2)]
+        self.snake_sprites = []
+        self.snake_directions = ['tail-top', 'bottom-top', 'bottom-head']
         self.way = "right"
         self.food = []
         self.add_food()
@@ -92,7 +94,7 @@ class Game_state:
         window.clear()
         # pozadí herního okna
         game.background.draw()
-        # vykreslení hada
+        # vykreslení hada na dané souřadnici
         for (x, y) in self.snake:
             green_tile.x = x * SQUARE
             green_tile.y = y * SQUARE
@@ -102,6 +104,24 @@ class Game_state:
             apple.x = x * SQUARE
             apple.y = y * SQUARE
             apple.draw()
+    
+
+
+    def draw_snake_parts(self):
+        '''
+        Draw the right IMG for each part of snake on the right place.
+        '''
+        self.snake_sprites.clear()
+        for index, xy in enumerate(self.snake):
+            x = xy[0]*GAME_FIELD_SIZE
+            y = xy[1]*GAME_FIELD_SIZE
+            IMG_name = self.snake_directions[index]
+            self.snake_sprites.append(pyglet.sprite.Sprite(snake_tiles[IMG_name], x, y, batch=batch))
+
+
+
+        
+
 
 
 # cyklus for, který přidává obrázky do slovníku snake_tiles
@@ -113,6 +133,7 @@ for path in TILES_DIRECTORY.glob("*.png"):
 # vytvoření objektu "game" + rozpohybování hada
 game = Game_state()
 pyglet.clock.schedule_interval(game.move, 1/4)
+batch = pyglet.graphics.Batch()
 
 
 # zelená dlaždice
