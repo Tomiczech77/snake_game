@@ -24,11 +24,19 @@ class Game_state:
         self.food = []
         self.add_food()
         self.skull = []
+        self.game_over = False
+        self.label = pyglet.text.Label("GAME OVER",
+                                    font_name ="Verdana",
+                                    font_size = 50,
+                                    x = window.width//2, y = window.height//2,
+                                    anchor_x="center", anchor_y="center")
+        self.label.color = (255, 255, 100, 255)
+        self.label.bold = True
         self.width = GAME_FIELD_SIZE
         self.height = GAME_FIELD_SIZE
         image_background = pyglet.image.load("background.jpg")
         self.background = pyglet.sprite.Sprite(image_background)
-        self.background.scale = 0.6
+        self.background.scale = 0.6        
 
 
     def add_food(self):
@@ -44,8 +52,12 @@ class Game_state:
                     break
 
     def add_skull(self, t):
-        """Přidá lebku jako past na hada."""
+        """Zkontroluje, jestli hra stále běží.
+        Pokud ano, přidá lebku jako past na hada.
+        Pokud ne, přeruší se."""
         while True:
+            if self.game_over == True:
+                break
             self.skull.clear()
             if self.skull == []:
                 x = randrange(0, 10)
@@ -57,7 +69,7 @@ class Game_state:
                 else:
                     self.skull.append((x, y))
                     break
-    
+
 
     def move(self, t):
         """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
@@ -71,21 +83,12 @@ class Game_state:
         elif self.way == "down":
             new_head = (x, y - 1) # úprava původní hlavy
 
-        # had, když narazí do stěny, hra končí
+        # had, když narazí do stěny nebo sebe sama nebo sní lebku, hra končí
         (x, y) = new_head
-        if x < 0 or x > 9 or y < 0 or y > 9:
+        if (x < 0 or x > 9 or y < 0 or y > 9) or new_head in self.snake or new_head in self.skull:
+            self.game_over = True
             pyglet.clock.unschedule(self.move)
             return
-
-        # had, když narazí do sebe sama, hra končí
-        if new_head in self.snake:
-            pyglet.clock.unschedule(self.move)
-            return
-        # had když sní lebku, hra končí
-        if new_head in self.skull:
-            pyglet.clock.unschedule(self.move)
-            return
-
 
         if new_head not in self.food and new_head not in self.skull:
             del self.snake[0] # smazání první souřadnici
@@ -97,9 +100,9 @@ class Game_state:
         self.snake.append(new_head) # had se prodlouží o danou souřadnici s jídlem
 
 
-    #ovládání pomocí kláves "wsad" (změna atributu self.way pomocí kláves)
     def button(self, text):
-        """Nastavení směru po stisknutí klávesy"""
+        """Nastavení směru po stisknutí kláves 'WSAD' 
+        (změna atributu self.way pomocí kláves)."""
         # pyglet.window.key.UP
         # pyglet.window.key.DOWN
         # pyglet.window.key.LEFT
@@ -114,7 +117,7 @@ class Game_state:
             game.way = "down"
 
     def draw(self):
-        """Vykresluje"""
+        """Vykresluje pozadí, hada, jídlo, lebku a na závěr hry GAME OVER"""
         window.clear()
         # pozadí herního okna
         game.background.draw()
@@ -133,6 +136,13 @@ class Game_state:
             skull.x = x * SQUARE
             skull.y = y * SQUARE
             skull.draw()
+        # když skončí hra, vykreslí se GAME OVER
+        if self.game_over == True:
+            self.label.draw()
+
+        
+
+    
        
 # cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
@@ -148,7 +158,6 @@ pyglet.clock.schedule_interval(game.move, 1/4)
 
 # každých 5 vteřin se změní souřadnice lebky
 pyglet.clock.schedule_interval(game.add_skull, 5)
-
 
 
 # načtení podoby hada
