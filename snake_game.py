@@ -11,6 +11,11 @@ SQUARE = 64 # v pixelech
 # velikost herního pole je 10 x 10
 GAME_FIELD_SIZE = 10
 window = pyglet.window.Window(width=SQUARE*GAME_FIELD_SIZE, height=SQUARE*GAME_FIELD_SIZE)
+def game_over():
+        image_game_over = pyglet.image.load("game_over.png")
+        game_over = pyglet.sprite.Sprite(image_game_over)
+        return print(game_over)
+
 
 class Game_state:
     def __init__(self):
@@ -18,12 +23,13 @@ class Game_state:
         self.way = "up"
         self.food = []
         self.add_food()
+        self.skull = []
         self.width = GAME_FIELD_SIZE
         self.height = GAME_FIELD_SIZE
         image_background = pyglet.image.load("background.jpg")
         self.background = pyglet.sprite.Sprite(image_background)
         self.background.scale = 0.6
-        # self.length_snake = len(self.snake)
+
 
     def add_food(self):
         """Přidá jídlo pro hada"""
@@ -36,7 +42,23 @@ class Game_state:
                 else:
                     self.food.append((x, y))
                     break
+
+    def add_skull(self, t):
+        """Přidá lebku jako past na hada."""
+        while True:
+            self.skull.clear()
+            if self.skull == []:
+                x = randrange(0, 10)
+                y = randrange(0, 10)
+                if (x, y) in self.snake:
+                    continue
+                elif (x, y) in self.food:
+                    continue
+                else:
+                    self.skull.append((x, y))
+                    break
     
+
     def move(self, t):
         """Nastavení pohybu hada na základě použité klávesy od hráče (WSAD)"""
         x, y = self.snake[-1]
@@ -58,10 +80,14 @@ class Game_state:
         # had, když narazí do sebe sama, hra končí
         if new_head in self.snake:
             pyglet.clock.unschedule(self.move)
-            # self.game_over()
+            return
+        # had když sní lebku, hra končí
+        if new_head in self.skull:
+            pyglet.clock.unschedule(self.move)
             return
 
-        if new_head not in self.food:
+
+        if new_head not in self.food and new_head not in self.skull:
             del self.snake[0] # smazání první souřadnici
 
         # pojídání jídla hadem
@@ -87,20 +113,11 @@ class Game_state:
         elif text == "s":
             game.way = "down"
 
-    # text na konec hry - dořešit
-    # def game_over(self):
-    #     text_game_over = pyglet.text.Label("GAME OVER",
-    #                         font_name="Times New Roma",
-    #                         font_size=36,
-    #                         x= (GAME_FIELD_SIZE / 3) * SQUARE, y=(GAME_FIELD_SIZE / 2) * SQUARE)
-
-
     def draw(self):
         """Vykresluje"""
         window.clear()
         # pozadí herního okna
         game.background.draw()
-        # game.text_game_over.draw()
         # vykreslení hada na dané souřadnici
         for (x, y) in self.snake:
             green_tile.x = x * SQUARE
@@ -111,12 +128,12 @@ class Game_state:
             apple.x = x * SQUARE
             apple.y = y * SQUARE
             apple.draw()
-        
-
-# def vykresli(snake, image):
-#     for index, xy in enumerate(snake):
-#         if (index - 1) ==  and (index + 1)
-
+        # vykreslení lebky
+        for (x, y) in self.skull:
+            skull.x = x * SQUARE
+            skull.y = y * SQUARE
+            skull.draw()
+       
 # cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
 for path in TILES_DIRECTORY.glob("*.png"):
@@ -129,13 +146,22 @@ game = Game_state()
 pyglet.clock.schedule_interval(game.move, 1/4)
 
 
-# zelená dlaždice
+# každých 5 vteřin se změní souřadnice lebky
+pyglet.clock.schedule_interval(game.add_skull, 5)
+
+
+
+# načtení podoby hada
 image_green = snake_tiles["tail-head"]
 green_tile = pyglet.sprite.Sprite(image_green)
 
-# jablko
+# načtení obrázku jablko (červené)
 image_apple = pyglet.image.load("apple.png")
 apple = pyglet.sprite.Sprite(image_apple)
+
+# načtení obrázku lebka
+image_skull = pyglet.image.load("skull.png")
+skull = pyglet.sprite.Sprite(image_skull)
 
 # registrace funkcí
 window.push_handlers(
