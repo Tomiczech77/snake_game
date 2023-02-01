@@ -179,6 +179,3 @@ window.push_handlers(
     )
 
 pyglet.app.run()
-
-sdsad
-dsdsd
