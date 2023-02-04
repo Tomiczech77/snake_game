@@ -17,8 +17,6 @@ def game_over():
         return print(game_over)
 
 
-
-
 class Game_state:
     def __init__(self):
         self.snake = [(0, 0), (0, 1), (0, 2)]
@@ -40,7 +38,7 @@ class Game_state:
         self.background = pyglet.sprite.Sprite(image_background)
         image_snake = pyglet.image.load("snake.png")
         self.img_snake = pyglet.sprite.Sprite(image_snake)
-        self.background.scale = 0.6        
+        self.background.scale = 0.6
 
 
     def add_food(self):
@@ -124,7 +122,7 @@ class Game_state:
         """Vykresluje pozadí, hada, jídlo, lebku a na závěr hry GAME OVER"""
         window.clear()
         # pozadí herního okna
-        game.background.draw()
+        self.background.draw()
         # vykreslení hada na dané souřadnici
         for (x, y) in self.snake:
             green_tile.x = x * SQUARE
@@ -148,9 +146,7 @@ class Game_state:
         if self.game_over == True:
             self.label_game_over.draw()
 
-        
 
-    
        
 # cyklus for, který přidává obrázky do slovníku snake_tiles
 snake_tiles = {}
