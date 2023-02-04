@@ -27,13 +27,13 @@ class Game_state:
         self.add_food()
         self.skull = []
         self.game_over = False
-        self.label = pyglet.text.Label("GAME OVER",
+        self.label_game_over = pyglet.text.Label("GAME OVER",
                                     font_name ="Verdana",
                                     font_size = 50,
                                     x = window.width//2, y = window.height//2,
                                     anchor_x="center", anchor_y="center")
-        self.label.color = (255, 255, 100, 255)
-        self.label.bold = True
+        self.label_game_over.color = (255, 255, 100, 255)
+        self.label_game_over.bold = True
         self.width = GAME_FIELD_SIZE
         self.height = GAME_FIELD_SIZE
         image_background = pyglet.image.load("background.jpg")
@@ -146,7 +146,7 @@ class Game_state:
         self.img_snake.draw()
         # když skončí hra, vykreslí se GAME OVER
         if self.game_over == True:
-            self.label.draw()
+            self.label_game_over.draw()
 
         
 
