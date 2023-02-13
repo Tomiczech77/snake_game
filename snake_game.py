@@ -36,8 +36,8 @@ class Game_state:
         self.height = GAME_FIELD_SIZE
         image_background = pyglet.image.load("background.jpg")
         self.background = pyglet.sprite.Sprite(image_background)
-        image_snake = pyglet.image.load("snake.png")
-        self.img_snake = pyglet.sprite.Sprite(image_snake)
+        # image_snake = pyglet.image.load("snake.png")
+        # self.img_snake = pyglet.sprite.Sprite(image_snake)
         self.background.scale = 0.6
 
 
@@ -138,10 +138,10 @@ class Game_state:
             skull.x = x * SQUARE
             skull.y = y * SQUARE
             skull.draw()
-        # vykreslení obrazku snake.png
-        self.img_snake.x = SQUARE * 0
-        self.img_snake.y = SQUARE * 9
-        self.img_snake.draw()
+        # # vykreslení obrazku snake.png
+        # self.img_snake.x = SQUARE * 0
+        # self.img_snake.y = SQUARE * 9
+        # self.img_snake.draw()
         # když skončí hra, vykreslí se GAME OVER
         if self.game_over == True:
             self.label_game_over.draw()
